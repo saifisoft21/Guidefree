@@ -420,5 +420,25 @@
         init();
     </script>
     <script type="module" src="main.js"></script>
+    <script>
+document.addEventListener("DOMContentLoaded", function() {
+    // جلب محتوى الصفحة بالكامل
+    let content = document.body.innerHTML;
+
+    // 1. تحويل # النص #p إلى خط كبير وأحمر
+    content = content.replace(/#(.*?)#p/g, '<span style="font-size: 1.5em; color: red;">$1</span>');
+
+    // 2. تحويل # النص #green إلى خط عادي وأخضر
+    content = content.replace(/#(.*?)#green/g, '<span style="color: green;">$1</span>');
+
+    // 3. تحويل # النص # إلى خط كبير فقط
+    // ملاحظة: يجب أن تكون هذه الخطوة هي الأخيرة
+    content = content.replace(/#(.*?)#/g, '<span style="font-size: 1.5em;">$1</span>');
+
+    // تطبيق التحديثات على الصفحة
+    document.body.innerHTML = content;
+});
+    </script>
+    
 </body>
 </html>
