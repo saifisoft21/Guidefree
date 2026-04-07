@@ -1,8 +1,6 @@
 import { db } from './firebase-config.js';
-import { setupAppCheck } from "./firebase-app-check.js";
 import { collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
-setupAppCheck();
 // دالة حماية النص الأصلية الخاصة بك
 const _e = (s) => {
     if (!s) return '';
