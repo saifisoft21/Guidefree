@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>مجتمع</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+        --bg-color: #f8fafc;
+        --surface-color: #ffffff;
+        --text-primary: #0f172a;
+        --text-secondary: #64748b;
+        --primary-accent: #3b82f6;
+        --primary-hover: #2563eb;
+        --border-color: #e2e8f0;
+        --danger: #ef4444;
+        --shadow-sm: 0 4px 6px -1px rgba(0,0,0,0.05);
+        --shadow-hover: 0 20px 25px -5px rgba(0,0,0,0.1);
+        --radius-lg: 16px;
+        --radius-full: 9999px;
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="dark"] {
+        --bg-color: #0b0f19;
+        --surface-color: #111827;
+        --text-primary: #f8fafc;
+        --text-secondary: #94a3b8;
+        --border-color: #1f2937;
+        --shadow-sm: 0 4px 6px -1px rgba(0,0,0,0.4);
+        --shadow-hover: 0 20px 25px -5px rgba(0,0,0,0.6);
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Tajawal', system-ui, -apple-system, sans-serif;
+        background: var(--bg-color);
+        color: var(--text-primary);
+        line-height: 1.6;
+        transition: 0.3s;
+        overflow-x: hidden;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    input, textarea {
+        -webkit-user-select: auto;
+        -moz-user-select: auto;
+        -ms-user-select: auto;
+        user-select: auto;
+    }
+
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+        background: var(--bg-color);
+    }
+    ::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--text-secondary);
+    }
+
+    .header {
+        background: color-mix(in srgb, var(--surface-color) 85%, transparent);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border-color);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        padding: 12px 0;
+    }
+
+    .header-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo {
+        font-size: 1.3rem;
+        font-weight: 900;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+    }
+    .logo i {
+        color: var(--primary-accent);
+    }
+
+    .header-actions {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+    }
+
+    .icon-btn {
+        background: none;
+        border: none;
+        color: var(--text-primary);
+        font-size: 1.3rem;
+        cursor: pointer;
+        transition: var(--transition);
+        position: relative;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .icon-btn:hover {
+        color: var(--primary-accent);
+        transform: rotate(15deg);
+    }
+
+    .notification-bell {
+        position: relative;
+    }
+    .badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background: var(--danger);
+        color: white;
+        font-size: 0.7rem;
+        font-weight: bold;
+        padding: 2px 5px;
+        border-radius: var(--radius-full);
+        min-width: 18px;
+        text-align: center;
+        display: none;
+    }
+    .notifications-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        margin-top: 15px;
+        background: var(--surface-color);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-hover);
+        width: 300px;
+        max-height: 400px;
+        overflow-y: auto;
+        display: none;
+        flex-direction: column;
+        z-index: 1000;
+    }
+    .notifications-dropdown.active {
+        display: flex;
+    }
+    .notif-item {
+        padding: 1rem;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        gap: 12px;
+        align-items: start;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+    .notif-item:hover {
+        background: color-mix(in srgb, var(--surface-color) 90%, var(--primary-accent));
+    }
+    .notif-item.unread {
+        background: color-mix(in srgb, var(--surface-color) 95%, var(--primary-accent));
+    }
+    .notif-item:last-child {
+        border-bottom: none;
+    }
+    .notif-icon {
+        color: var(--primary-accent);
+        font-size: 1.2rem;
+        margin-top: 3px;
+    }
+    .notif-content {
+        flex: 1;
+    }
+    .notif-text {
+        font-size: 0.95rem;
+        color: var(--text-primary);
+        margin-bottom: 4px;
+        font-weight: 500;
+    }
+    .notif-time {
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+    }
+    .notif-empty {
+        padding: 2rem;
+        text-align: center;
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+    }
+
+    .main-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        min-height: 50vh;
+    }
+
+    .create-post {
+        background: var(--surface-color);
+        border-radius: var(--radius-lg);
+        padding: 20px;
+        margin-bottom: 30px;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border-color);
+        transition: var(--transition);
+    }
+    .create-post:hover {
+        box-shadow: var(--shadow-hover);
+        border-color: color-mix(in srgb, var(--primary-accent) 40%, transparent);
+    }
+    .input-group {
+        position: relative;
+    }
+    .post-input {
+        width: 100%;
+        background: transparent;
+        border: none;
+        color: var(--text-primary);
+        font-size: 1.1rem;
+        resize: none;
+        min-height: 80px;
+        padding-bottom: 2rem;
+        outline: none;
+        font-family: inherit;
+    }
+    .post-input::placeholder {
+        color: var(--text-secondary);
+    }
+    .char-count {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+    }
+    .char-count.limit {
+        color: var(--danger);
+    }
+    .create-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px solid var(--border-color);
+    }
+    .btn {
+        background: var(--primary-accent);
+        color: white;
+        border: none;
+        padding: 8px 24px;
+        border-radius: var(--radius-full);
+        font-weight: 700;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: var(--transition);
+        font-family: inherit;
+    }
+    .btn:hover:not(:disabled) {
+        background: var(--primary-hover);
+        transform: translateY(-2px);
+    }
+    .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    .filters {
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        padding-bottom: 15px;
+        margin-bottom: 25px;
+        scrollbar-width: none;
+    }
+    .filters::-webkit-scrollbar {
+        display: none;
+    }
+    .filter-btn {
+        padding: 10px 24px;
+        border: 1px solid var(--border-color);
+        background: var(--surface-color);
+        color: var(--text-primary);
+        border-radius: var(--radius-full);
+        font-weight: 700;
+        cursor: pointer;
+        transition: var(--transition);
+        white-space: nowrap;
+        font-family: inherit;
+        font-size: 0.95rem;
+    }
+    .filter-btn:hover {
+        border-color: var(--primary-accent);
+        color: var(--primary-accent);
+    }
+    .filter-btn.active {
+        background: var(--text-primary);
+        color: var(--bg-color);
+        border-color: var(--text-primary);
+    }
+
+    .post {
+        background: var(--surface-color);
+        border-radius: var(--radius-lg);
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: var(--shadow-sm);
+        border: 1px solid var(--border-color);
+        animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: var(--transition);
+        display: flex;
+        flex-direction: column;
+    }
+    .post:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-hover);
+        border-color: color-mix(in srgb, var(--primary-accent) 40%, transparent);
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .post-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    .author {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 700;
+        color: var(--text-primary);
+    }
+    .avatar {
+        width: 38px;
+        height: 38px;
+        background: color-mix(in srgb, var(--primary-accent) 15%, transparent);
+        color: var(--primary-accent);
+        border-radius: var(--radius-full);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+    }
+    .time {
+        font-size: 0.85rem;
+        color: var(--text-secondary);
+        font-weight: 500;
+    }
+    .post-content {
+        font-size: 1.05rem;
+        margin-bottom: 20px;
+        white-space: pre-wrap;
+        word-break: break-word;
+        color: var(--text-primary);
+        line-height: 1.6;
+    }
+    .post-actions {
+        display: flex;
+        gap: 24px;
+        border-top: 1px solid var(--border-color);
+        padding-top: 15px;
+    }
+    .action-btn {
+        background: none;
+        border: none;
+        color: var(--text-secondary);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        transition: var(--transition);
+        font-family: inherit;
+    }
+    .action-btn:hover {
+        color: var(--primary-accent);
+        transform: translateY(-2px);
+    }
+    .action-btn.liked {
+        color: var(--primary-accent);
+    }
+
+    .replies-section {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 1px dashed var(--border-color);
+        display: none;
+        animation: fadeIn 0.3s ease;
+    }
+    .reply-input-group {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+    .reply-input {
+        flex: 1;
+        padding: 12px 20px;
+        border: 2px solid var(--border-color);
+        border-radius: var(--radius-full);
+        background: var(--surface-color);
+        color: var(--text-primary);
+        outline: none;
+        font-size: 0.95rem;
+        transition: var(--transition);
+        font-family: inherit;
+        box-shadow: var(--shadow-sm);
+    }
+    .reply-input:focus {
+        border-color: var(--primary-accent);
+        box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary-accent) 15%, transparent);
+    }
+    .reply-btn {
+        background: var(--primary-accent);
+        color: white;
+        border: none;
+        width: 46px;
+        height: 46px;
+        border-radius: var(--radius-full);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: var(--transition);
+        box-shadow: var(--shadow-sm);
+    }
+    .reply-btn:hover:not(:disabled) {
+        background: var(--primary-hover);
+        transform: translateY(-2px);
+    }
+    .reply-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+    }
+    .reply-item {
+        background: color-mix(in srgb, var(--surface-color) 95%, var(--text-primary));
+        padding: 15px;
+        border-radius: var(--radius-lg);
+        margin-bottom: 12px;
+        margin-right: 20px; 
+        border: 1px solid var(--border-color);
+        transition: var(--transition);
+    }
+    .reply-item:hover {
+        border-color: color-mix(in srgb, var(--primary-accent) 40%, transparent);
+    }
+    .reply-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+    .reply-item .author {
+        font-size: 0.9rem;
+        font-weight: 700;
+    }
+    .reply-item .avatar {
+        width: 28px;
+        height: 28px;
+        font-size: 0.8rem;
+    }
+    .reply-item .time {
+        font-size: 0.8rem;
+        color: var(--text-secondary);
+        font-weight: 500;
+    }
+    .reply-content {
+        font-size: 0.95rem;
+        margin-bottom: 12px;
+        white-space: pre-wrap;
+        word-break: break-word;
+        color: var(--text-primary);
+        line-height: 1.6;
+    }
+    .reply-actions {
+        display: flex;
+        gap: 15px;
+        border-top: 1px solid var(--border-color);
+        padding-top: 10px;
+    }
+    .reply-actions .action-btn {
+        font-size: 0.9rem;
+    }
+
+    .toast {
+        position: fixed;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background: var(--surface-color);
+        color: var(--text-primary);
+        padding: 12px 24px;
+        border-radius: var(--radius-full);
+        box-shadow: var(--shadow-hover);
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition: var(--transition);
+        z-index: 1000;
+        border: 1px solid var(--border-color);
+        font-weight: 600;
+    }
+    .toast.show {
+        transform: translateX(-50%) translateY(0);
+    }
+    .toast-icon.success { color: var(--primary-accent); }
+    .toast-icon.error { color: var(--danger); }
+
+    @media (max-width: 640px) {
+        .header-container, .main-container {
+            padding: 15px;
+        }
+        .notifications-dropdown {
+            position: fixed;
+            top: 70px;
+            left: 10px;
+            right: 10px;
+            width: auto;
+        }
+        .post:hover, .create-post:hover {
+            transform: none;
+        }
+    }
+</style>
+
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <a href="#" class="logo">
+                <i class="fa-solid fa-users"></i>
+                مجتمع
+            </a>
+            <div class="header-actions">
+                <div class="notification-bell">
+                    <button class="icon-btn" id="bell-btn">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="badge" id="notif-badge">0</span>
+                    </button>
+                    <div class="notifications-dropdown" id="notifications-dropdown">
+                    </div>
+                </div>
+                <button class="icon-btn" id="theme-toggle">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+                <a href="index.html" class="icon-btn" title="الرئيسية">
+                    <i class="fa-solid fa-house"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="create-post">
+            <div class="input-group">
+                <textarea 
+                    class="post-input" 
+                    id="post-input"
+                    placeholder="شارك أفكارك مع المجتمع... (يمنع نشر الروابط)"
+                    maxlength="500"
+                ></textarea>
+                <span class="char-count" id="char-count">0 / 500</span>
+            </div>
+            <div class="create-actions">
+                <button class="btn" id="submit-btn" disabled>نشر</button>
+            </div>
+        </div>
+
+        <div class="filters">
+            <button class="filter-btn active" data-sort="new">الأحدث</button>
+            <button class="filter-btn" data-sort="hot">الأكثر تفاعلاً</button>
+        </div>
+
+        <div id="feed">
+        </div>
+    </main>
+
+    <div class="toast" id="toast">
+        <i class="fa-solid fa-circle-check toast-icon success" id="toast-icon"></i>
+        <span id="toast-msg"></span>
+    </div>
+
+    <script type="module">
+        // هام جداً: تأكد أن اسم ملف الإعدادات هنا يطابق تماماً اسم الملف الذي لديك (firebase-config.js أو firebase-config2.js)
+        import { realtimeDb as db2 } from './firebase-config.js';
+        
+        import { ref, push, set, remove, onValue, query, orderByChild, equalTo, limitToLast, runTransaction, update } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-database.js";
+
+        window.activeReplySections = window.activeReplySections || {};
+        window.pendingReplyTexts = window.pendingReplyTexts || {};
+
+        const Utils = {
+            getFingerprint: () => {
+                try {
+                    let text = navigator.userAgent + screen.width;
+                    return "DEV_" + btoa(text).substring(0, 8).toUpperCase();
+                } catch (e) {
+                    return "DEV_" + Math.random().toString(36).substr(2, 9).toUpperCase();
+                }
+            },
+            timeAgo: (timestamp) => {
+                const seconds = Math.floor((Date.now() - timestamp) / 1000);
+                if (seconds < 60) return 'الآن';
+                const minutes = Math.floor(seconds / 60);
+                if (minutes < 60) return `منذ ${minutes} دقيقة`;
+                const hours = Math.floor(minutes / 60);
+                if (hours < 24) return `منذ ${hours} ساعة`;
+                const days = Math.floor(hours / 24);
+                return `منذ ${days} يوم`;
+            },
+            escapeHTML: (str) => {
+                const div = document.createElement('div');
+                div.textContent = str;
+                return div.innerHTML;
+            },
+            throttle: (func, limit) => {
+                let inThrottle;
+                return function(...args) {
+                    if (!inThrottle) {
+                        func.apply(this, args);
+                        inThrottle = true;
+                        setTimeout(() => inThrottle = false, limit);
+                    }
+                }
+            }
+        };
+
+        const State = {
+            currentUser: (() => {
+                try {
+                    // كود محمي 100% ضد الأخطاء (حتى لو كانت البيانات تالفة سيقوم بإصلاحها)
+                    let user = null;
+                    try {
+                        let saved = localStorage.getItem('community_user');
+                        if(saved) user = JSON.parse(saved);
+                    } catch(e) {
+                        localStorage.removeItem('community_user'); 
+                    }
+
+                    let fp = Utils.getFingerprint();
+                    if (!fp) fp = "DEV_UNKNOWN";
+                    
+                    let smartName = 'مستخدم_' + String(fp).replace('DEV_', '').substring(0, 5);
+
+                    if (!user || typeof user !== 'object') {
+                        user = { id: fp, name: smartName, isDark: false };
+                    } else {
+                        user.id = fp;
+                        user.name = smartName;
+                    }
+                    
+                    localStorage.setItem('community_user', JSON.stringify(user));
+                    return user;
+                } catch (e) {
+                    console.error("تم تجاوز الخطأ", e);
+                    return { id: "DEV_FALLBACK", name: "مستخدم", isDark: false };
+                }
+            })(),
+            posts: [],
+            replies: {},
+            notifications: [],
+            sort: 'new'
+        };
+
+        const UI = {
+            input: document.getElementById('post-input'),
+            charCount: document.getElementById('char-count'),
+            submitBtn: document.getElementById('submit-btn'),
+            feed: document.getElementById('feed'),
+            themeToggle: document.getElementById('theme-toggle'),
+            bellBtn: document.getElementById('bell-btn'),
+            notifDropdown: document.getElementById('notifications-dropdown'),
+            notifBadge: document.getElementById('notif-badge'),
+
+            initTheme: () => {
+                if (State.currentUser.isDark) {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    UI.themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+                }
+                
+                UI.themeToggle.addEventListener('click', () => {
+                    State.currentUser.isDark = !State.currentUser.isDark;
+                    localStorage.setItem('community_user', JSON.stringify(State.currentUser));
+                    
+                    if (State.currentUser.isDark) {
+                        document.documentElement.setAttribute('data-theme', 'dark');
+                        UI.themeToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+                    } else {
+                        document.documentElement.removeAttribute('data-theme');
+                        UI.themeToggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
+                    }
+                });
+            },
+
+            initNotifications: () => {
+                UI.bellBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    UI.notifDropdown.classList.toggle('active');
+                    if (UI.notifDropdown.classList.contains('active')) {
+                        Data.markNotificationsRead();
+                    }
+                });
+
+                document.addEventListener('click', (e) => {
+                    if (!UI.notifDropdown.contains(e.target) && !UI.bellBtn.contains(e.target)) {
+                        UI.notifDropdown.classList.remove('active');
+                    }
+                });
+            },
+
+            updateNotifications: () => {
+                const unreadCount = State.notifications.filter(n => !n.read).length;
+                
+                if (unreadCount > 0) {
+                    UI.notifBadge.textContent = unreadCount;
+                    UI.notifBadge.style.display = 'block';
+                } else {
+                    UI.notifBadge.style.display = 'none';
+                }
+
+                if (State.notifications.length === 0) {
+                    UI.notifDropdown.innerHTML = '<div class="notif-empty">لا توجد إشعارات حالياً</div>';
+                    return;
+                }
+
+                UI.notifDropdown.innerHTML = State.notifications.map(n => `
+                    <div class="notif-item ${!n.read ? 'unread' : ''}">
+                        <div class="notif-icon">
+                            <i class="fa-solid ${n.type === 'like' ? 'fa-heart' : 'fa-reply'}"></i>
+                        </div>
+                        <div class="notif-content">
+                            <div class="notif-text">${Utils.escapeHTML(n.text)}</div>
+                            <div class="notif-time">${Utils.timeAgo(n.createdAt)}</div>
+                        </div>
+                    </div>
+                `).join('');
+            },
+
+            renderPost: (post) => {
+                const isLiked = post.likesList?.includes(State.currentUser.id);
+                
+                const postReplies = State.replies[post.id] || [];
+                const repliesHtml = postReplies.map(reply => {
+                    const isReplyLiked = reply.likesList?.includes(State.currentUser.id);
+                    return `
+                    <div class="reply-item">
+                        <div class="reply-header">
+                            <div class="author">
+                                <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                                <span>${Utils.escapeHTML(reply.author)}</span>
+                            </div>
+                            <span class="time">${Utils.timeAgo(reply.createdAt)}</span>
+                        </div>
+                        <div class="reply-content">${Utils.escapeHTML(reply.text)}</div>
+                        <div class="reply-actions">
+                            <button class="action-btn ${isReplyLiked ? 'liked' : ''}" onclick="window.toggleReplyLike('${post.id}', '${reply.id}')">
+                                <i class="fa-${isReplyLiked ? 'solid' : 'regular'} fa-heart"></i>
+                                <span>${reply.likes || 0}</span>
+                            </button>
+                        </div>
+                    </div>
+                    `;
+                }).join('');
+
+                return `
+                    <article class="post" data-id="${post.id}">
+                        <div class="post-header">
+                            <div class="author">
+                                <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                                <span>${Utils.escapeHTML(post.author)}</span>
+                            </div>
+                            <span class="time">${Utils.timeAgo(post.createdAt)}</span>
+                        </div>
+                        <div class="post-content">${Utils.escapeHTML(post.text)}</div>
+                        <div class="post-actions">
+                            <button class="action-btn ${isLiked ? 'liked' : ''}" onclick="window.toggleLike('${post.id}')">
+                                <i class="fa-${isLiked ? 'solid' : 'regular'} fa-heart"></i>
+                                <span>${post.likes || 0}</span>
+                            </button>
+                            <button class="action-btn" onclick="window.toggleReplySection('${post.id}')">
+                                <i class="fa-regular fa-comment"></i>
+                                <span>${postReplies.length > 0 ? postReplies.length : 'رد'}</span>
+                            </button>
+                            <button class="action-btn" onclick="window.sharePost('${post.id}')">
+                                <i class="fa-solid fa-share-nodes"></i>
+                                <span>مشاركة</span>
+                            </button>
+                        </div>
+
+                        <div class="replies-section" id="replies-${post.id}" style="display: ${window.activeReplySections[post.id] ? 'block' : 'none'};">
+                            <div class="reply-input-group">
+                                <input type="text" class="reply-input" id="reply-input-${post.id}" 
+                                       placeholder="اكتب رداً..." 
+                                       value="${window.pendingReplyTexts[post.id] || ''}"
+                                       oninput="window.saveReplyDraft('${post.id}', this.value)"
+                                       onkeypress="if(event.key === 'Enter') window.submitReply('${post.id}')">
+                                <button class="reply-btn" onclick="window.submitReply('${post.id}')">
+                                    <i class="fa-solid fa-paper-plane"></i>
+                                </button>
+                            </div>
+                            <div class="replies-list" id="replies-list-${post.id}">
+                                ${repliesHtml}
+                            </div>
+                        </div>
+                    </article>
+                `;
+            },
+
+            updateFeed: () => {
+                const activeElem = document.activeElement;
+                const focusedId = activeElem?.id;
+                const selectionStart = activeElem?.selectionStart;
+                const selectionEnd = activeElem?.selectionEnd;
+
+                let sortedPosts = [...State.posts];
+                
+                if (State.sort === 'hot') {
+                    sortedPosts.sort((a, b) => {
+                        const scoreA = (a.likes || 0) - ((Date.now() - a.createdAt) / 3600000);
+                        const scoreB = (b.likes || 0) - ((Date.now() - b.createdAt) / 3600000);
+                        return scoreB - scoreA;
+                    });
+                } else {
+                    sortedPosts.sort((a, b) => b.createdAt - a.createdAt);
+                }
+
+                UI.feed.innerHTML = sortedPosts.map(UI.renderPost).join('');
+
+                if (focusedId && document.getElementById(focusedId)) {
+                    const input = document.getElementById(focusedId);
+                    input.focus();
+                    try {
+                        input.setSelectionRange(selectionStart, selectionEnd);
+                    } catch(e) {}
+                }
+            }
+        };
+
+        const Alert = {
+            show: (msg, type = 'success') => {
+                const toast = document.getElementById('toast');
+                const icon = document.getElementById('toast-icon');
+                const text = document.getElementById('toast-msg');
+                
+                icon.className = `fa-solid fa-circle-${type === 'success' ? 'check' : 'xmark'} toast-icon ${type}`;
+                text.textContent = msg;
+                
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 3000);
+            }
+        };
+
+        const Data = {
+            activeReplyListeners: {},
+
+            createPost: async (text) => {
+                UI.submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+                UI.submitBtn.disabled = true;
+
+                const urlRegex = /(https?:\/\/[^\s]+)|(www\.[^\s]+)|([a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\b)/i;
+                if (urlRegex.test(text)) {
+                    Alert.show('عذراً، يمنع نشر الروابط في المجتمع.', 'error');
+                    UI.submitBtn.innerHTML = 'نشر';
+                    UI.submitBtn.disabled = false;
+                    return;
+                }
+
+                try {
+                    const newPostRef = push(ref(db2, 'posts'));
+                    await set(newPostRef, {
+                        text,
+                        author: State.currentUser.name,
+                        userId: State.currentUser.id,
+                        createdAt: Date.now(),
+                        likes: 0,
+                        likesList: {} 
+                    });
+                    
+                    UI.input.value = '';
+                    UI.charCount.textContent = '0 / 500';
+                    UI.submitBtn.innerHTML = 'نشر';
+                    Alert.show('تم النشر بنجاح');
+                } catch (error) {
+                    console.error("Error adding document: ", error);
+                    Alert.show('حدث خطأ أثناء النشر', 'error');
+                    UI.submitBtn.innerHTML = 'نشر';
+                    UI.submitBtn.disabled = false;
+                }
+            },
+
+            initListeners: () => {
+                const q = query(ref(db2, 'posts'), orderByChild('createdAt'), limitToLast(50));
+                
+                onValue(q, (snapshot) => {
+                    const now = Date.now();
+                    const oneWeek = 7 * 24 * 60 * 60 * 1000;
+                    
+                    const tempPosts = [];
+                    snapshot.forEach((childSnapshot) => {
+                        const data = childSnapshot.val();
+                        
+                        if (now - data.createdAt > oneWeek) {
+                            remove(ref(db2, `posts/${childSnapshot.key}`)).catch(e => console.error(e));
+                            return; 
+                        }
+
+                        tempPosts.push({ 
+                            id: childSnapshot.key, 
+                            ...data,
+                            likesList: data.likesList ? Object.keys(data.likesList) : []
+                        });
+                    });
+                    
+                    State.posts = tempPosts.reverse();
+
+                    State.posts.forEach(post => {
+                        if (window.activeReplySections[post.id]) {
+                            Data.listenReplies(post.id);
+                        }
+                    });
+
+                    UI.updateFeed();
+                });
+            },
+
+            listenReplies: (postId) => {
+                if (Data.activeReplyListeners[postId]) return; 
+                
+                const q = query(ref(db2, 'replies'), orderByChild('postId'), equalTo(postId));
+                Data.activeReplyListeners[postId] = onValue(q, (snapshot) => {
+                    State.replies[postId] = [];
+                    snapshot.forEach(childSnapshot => {
+                        const data = childSnapshot.val();
+                        State.replies[postId].push({ 
+                            id: childSnapshot.key, 
+                            ...data,
+                            likesList: data.likesList ? Object.keys(data.likesList) : []
+                        });
+                    });
+                    State.replies[postId].sort((a, b) => a.createdAt - b.createdAt);
+
+                    if (window.activeReplySections[postId]) {
+                        UI.updateFeed();
+                    }
+                });
+            },
+
+            listenNotifications: () => {
+                const q = query(ref(db2, 'notifications'), orderByChild('userId'), equalTo(State.currentUser.id));
+                
+                onValue(q, (snapshot) => {
+                    let notifs = [];
+                    snapshot.forEach(childSnapshot => {
+                        notifs.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                    });
+                    
+                    State.notifications = notifs.sort((a, b) => b.createdAt - a.createdAt).slice(0, 15);
+                    UI.updateNotifications();
+                });
+            },
+
+            markNotificationsRead: () => {
+                State.notifications.forEach(async (notif) => {
+                    if (!notif.read) {
+                        try {
+                            await update(ref(db2, `notifications/${notif.id}`), {
+                                read: true
+                            });
+                        } catch(e) {}
+                    }
+                });
+            }
+        };
+
+        window.toggleLike = async (id) => {
+            const postRef = ref(db2, `posts/${id}`);
+            const post = State.posts.find(p => p.id === id);
+            
+            if (!post) return;
+
+            const hasLiked = post.likesList?.includes(State.currentUser.id);
+
+            try {
+                if (hasLiked) {
+                    await update(postRef, {
+                        [`likesList/${State.currentUser.id}`]: null
+                    });
+                    await runTransaction(ref(db2, `posts/${id}/likes`), (currentLikes) => (currentLikes || 0) - 1);
+                } else {
+                    await update(postRef, {
+                        [`likesList/${State.currentUser.id}`]: true
+                    });
+                    await runTransaction(ref(db2, `posts/${id}/likes`), (currentLikes) => (currentLikes || 0) + 1);
+
+                    if (post.userId && post.userId !== State.currentUser.id) {
+                        try {
+                            const newNotifRef = push(ref(db2, 'notifications'));
+                            await set(newNotifRef, {
+                                userId: post.userId,
+                                type: 'like',
+                                postId: id,
+                                text: 'شخص ما أعجب بمنشورك',
+                                createdAt: Date.now(),
+                                read: false
+                            });
+                        } catch(e) {}
+                    }
+                }
+            } catch (error) {
+                Alert.show('حدث خطأ', 'error');
+            }
+        };
+
+        window.toggleReplyLike = async (postId, replyId) => {
+            const replyRef = ref(db2, `replies/${replyId}`);
+            const reply = State.replies[postId]?.find(r => r.id === replyId);
+            if (!reply) return;
+
+            const hasLiked = reply.likesList?.includes(State.currentUser.id);
+
+            try {
+                if (hasLiked) {
+                    await update(replyRef, {
+                        [`likesList/${State.currentUser.id}`]: null
+                    });
+                    await runTransaction(ref(db2, `replies/${replyId}/likes`), (currentLikes) => (currentLikes || 0) - 1);
+                } else {
+                    await update(replyRef, {
+                        [`likesList/${State.currentUser.id}`]: true
+                    });
+                    await runTransaction(ref(db2, `replies/${replyId}/likes`), (currentLikes) => (currentLikes || 0) + 1);
+
+                    if (reply.userId && reply.userId !== State.currentUser.id) {
+                        const newNotifRef = push(ref(db2, 'notifications'));
+                        await set(newNotifRef, {
+                            userId: reply.userId,
+                            type: 'like',
+                            postId: postId,
+                            text: 'شخص ما أعجب بردك',
+                            createdAt: Date.now(),
+                            read: false
+                        });
+                    }
+                }
+            } catch (e) {
+                Alert.show('حدث خطأ في الإعجاب بالرد', 'error');
+            }
+        };
+
+        window.toggleReplySection = (postId) => {
+            window.activeReplySections[postId] = !window.activeReplySections[postId];
+            UI.updateFeed();
+            
+            if (window.activeReplySections[postId]) {
+                Data.listenReplies(postId); 
+                setTimeout(() => document.getElementById(`reply-input-${postId}`)?.focus(), 50);
+            }
+        };
+
+        window.saveReplyDraft = (postId, text) => {
+            window.pendingReplyTexts[postId] = text;
+        };
+
+        window.submitReply = async (postId) => {
+            const input = document.getElementById(`reply-input-${postId}`);
+            const text = input.value.trim();
+            if (!text) return;
+
+            const urlRegex = /(https?:\/\/[^\s]+)|(www\.[^\s]+)|([a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\b)/i;
+            if (urlRegex.test(text)) {
+                Alert.show('عذراً، يمنع نشر الروابط.', 'error');
+                return;
+            }
+
+            input.disabled = true;
+            try {
+                const newReplyRef = push(ref(db2, 'replies'));
+                await set(newReplyRef, {
+                    postId: postId,
+                    text: text,
+                    author: State.currentUser.name,
+                    userId: State.currentUser.id,
+                    createdAt: Date.now(),
+                    likes: 0,
+                    likesList: {}
+                });
+                
+                window.pendingReplyTexts[postId] = '';
+                input.value = '';
+                Alert.show('تم إضافة الرد بنجاح', 'success');
+
+                const post = State.posts.find(p => p.id === postId);
+                if (post && post.userId !== State.currentUser.id) {
+                    const newNotifRef = push(ref(db2, 'notifications'));
+                    await set(newNotifRef, {
+                        userId: post.userId,
+                        type: 'reply',
+                        postId: postId,
+                        text: `${State.currentUser.name} قام بالرد على منشورك`,
+                        createdAt: Date.now(),
+                        read: false
+                    });
+                }
+            } catch (error) {
+                Alert.show('خطأ في إضافة الرد', 'error');
+            } finally {
+                input.disabled = false;
+                input.focus();
+            }
+        };
+
+        window.sharePost = (id) => {
+            const url = `${window.location.origin}${window.location.pathname}?post=${id}`;
+            navigator.clipboard.writeText(url).then(() => {
+                Alert.show('تم نسخ الرابط!', 'success');
+            }).catch(() => {
+                Alert.show('فشل نسخ الرابط', 'error');
+            });
+        };
+
+        const init = () => {
+            UI.initTheme();
+            UI.initNotifications();
+            
+            UI.input.addEventListener('input', Utils.throttle((e) => {
+                const len = e.target.value.length;
+                UI.charCount.textContent = `${len} / 500`;
+                if (len > 500) {
+                    UI.charCount.classList.add('limit');
+                    UI.submitBtn.disabled = true;
+                } else {
+                    UI.charCount.classList.remove('limit');
+                    UI.submitBtn.disabled = len === 0;
+                }
+            }, 100));
+
+            UI.submitBtn.addEventListener('click', () => {
+                const text = UI.input.value.trim();
+                if (text && text.length <= 500) {
+                    Data.createPost(text);
+                }
+            });
+
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    State.sort = e.target.dataset.sort;
+                    UI.updateFeed();
+                });
+            });
+
+            document.addEventListener('copy', (e) => {
+                if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+                    e.preventDefault();
+                    Alert.show('عذراً، النسخ غير مسموح به', 'error');
+                }
+            });
+
+            Data.initListeners();
+            Data.listenNotifications();
+            
+            setInterval(() => {
+                if (State.sort === 'hot') {
+                    requestIdleCallback(() => UI.updateFeed());
+                }
+            }, 60000);
+        };
+
+        init();
+    </script>
+</body>
+</html>
